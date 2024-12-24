@@ -7,6 +7,8 @@ Aqui você vai encontrar os detalhes do que fazer antes de iniciar o desenvolvim
 
 ## 🛠 O que deverá ser desenvolvido
 
+
+
 Uma equipe de pessoas desenvolvedoras estava encarregada de criar um sistema simples para gerenciar informações de vídeos, como título, descrição e duração, armazenando esses dados em arquivos locais. O sistema foi desenvolvido utilizando Java com conceitos básicos de POO e manipulação de arquivos, mas, infelizmente, a equipe não seguiu as melhores práticas de desenvolvimento.
 
 O código está funcional, mas apresenta **bugs**, **problemas de organização** e **más práticas de programação**. Além disso, o sistema não possui validações adequadas e a interface de interação com o usuário (via terminal) é confusa.
