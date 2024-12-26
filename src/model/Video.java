@@ -1,4 +1,5 @@
-import java.text.SimpleDateFormat;
+package model;
+
 import java.util.Date;
 
 public class Video {

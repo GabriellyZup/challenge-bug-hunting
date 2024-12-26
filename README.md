@@ -30,7 +30,7 @@ Antes de começar, certifique-se de que você tem as ferramentas necessárias in
 
 O código será dividido em pacotes para organizar melhor as responsabilidades:
 
-- model: Contém a classe Video.
+- model: Contém a classe model.Video.
 - repository: Contém a interface VideoRepository e sua implementação FileVideoRepository.
 - service: Contém a interface VideoService e sua implementação VideoServiceImpl.
 - strategy: Contém estratégias para busca de vídeos (SearchStrategy).
@@ -117,7 +117,7 @@ Aqui estão os principais pontos que você deve corrigir no sistema:
 2. Más práticas de POO:
 
 - A classe Main mistura lógica de negócios, manipulação de arquivos e interação com o usuário.
-- A classe Video expõe diretamente seus atributos, violando o encapsulamento.
+- A classe model.Video expõe diretamente seus atributos, violando o encapsulamento.
 
 3. Interface confusa:
 
@@ -145,7 +145,7 @@ Aqui estão os principais pontos que você deve corrigir e implementar no sistem
    - Separe as responsabilidades do código em diferentes classes, como:
        - Uma classe para gerenciar a lógica de negócios (VideoManager).
        - Uma classe para manipular arquivos (FileHandler).
-   - Aplique o princípio de encapsulamento na classe Video, tornando os atributos privados e acessíveis apenas por getters e setters.
+   - Aplique o princípio de encapsulamento na classe model.Video, tornando os atributos privados e acessíveis apenas por getters e setters.
    - Modularize o código para evitar duplicação e melhorar a legibilidade.
 3. Validações
 
