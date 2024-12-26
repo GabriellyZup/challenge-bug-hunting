@@ -8,7 +8,7 @@ import java.util.Date;
 public class VideoModel {
     private String title;
     private String description;
-    private int duration; // in minutes
+    private int duration;
     private String category;
     private Date publicationDate;
 
@@ -18,6 +18,13 @@ public class VideoModel {
         this.duration = duration;
         this.category = category;
         this.publicationDate = publicationDate;
+    }
+
+    public VideoModel(String title, String description, int duration) {
+    }
+
+    public static VideoModel fromString(String line) {
+        return null;
     }
 
     public String getTitle() {
@@ -48,7 +55,6 @@ public class VideoModel {
 }
 
     /**
-
     public static VideoModel fromString(String linha) {
         try {
             String[] partes = linha.split(";");

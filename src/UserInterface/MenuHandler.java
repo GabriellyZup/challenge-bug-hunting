@@ -1,5 +1,6 @@
 package UserInterface;
 
+import model.VideoModel;
 import java.util.Scanner;
 
 public class MenuHandler {
@@ -19,14 +20,30 @@ public class MenuHandler {
         return scanner.nextInt();
     }
 
-    // Fecha o scanner ao sair do programa
+    //fecha scanner
     public void closeScanner() {
         scanner.close();
     }
 
-    // Retorna o scanner para capturar entradas adicionais, se necessário
+    //retorna scanner para capturar entradas adic, se neces
     public Scanner getScanner() {
         return scanner;
+    }
+
+    // Captura os dados de um vídeo e retorna um objeto VideoModel
+    public VideoModel captureVideo() {
+        scanner.nextLine();
+        System.out.println("\n=== Capturar Vídeo ===");
+        System.out.print("Digite o título do vídeo: ");
+        String title = scanner.nextLine();
+        System.out.print("Digite a descrição do vídeo: ");
+        String description = scanner.nextLine();
+        System.out.print("Digite a duração do vídeo (em minutos): ");
+        int duration = scanner.nextInt();
+        scanner.nextLine();
+
+        // Retorna um novo objeto VideoModel com os dados capturados
+        return new VideoModel(title, description, duration);
     }
 }
 

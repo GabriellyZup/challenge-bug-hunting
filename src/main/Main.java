@@ -17,20 +17,27 @@ public class Main {
 
         while (true) {
 
-            int option = menuHandler.displayMenu(); // Exibe o menu e captura a opção
+            int option = menuHandler.displayMenu();
             menuHandler.getScanner().nextLine();
 
 
             if (option == 1) {
-                // Adicionar vídeo
-                VideoModel video = menuHandler.captureVideo(); // Captura os dados do vídeo
+                VideoModel video = menuHandler.captureVideo();
                 if (video != null) {
                     videoService.addVideo(video);
                     System.out.println("Vídeo adicionado com sucesso!");
                 }
-
+            } else if (option == 2) {
+                System.out.println("=== Lista de Vídeos ===");
+                List<VideoModel> videos = videoService.listVideos();
+                if (videos.isEmpty()) {
+                    System.out.println("Nenhum vídeo encontrado.");
+                } else {
+                    for (VideoModel video : videos) {
+                        System.out.println(video);
+                    }
+                }
             } else if (option == 3) {
-                // Pesquisar vídeo por título
                 System.out.print("Digite o título para busca: ");
                 String query = menuHandler.getScanner().nextLine();
                 List<VideoModel> results = searchStrategy.search(videoService.listVideos(), query);
@@ -38,16 +45,13 @@ public class Main {
                     System.out.println(video);
                 }
             } else if (option == 4) {
-                // Sair do sistema
                 System.out.println("Saindo do sistema...");
                 break;
             } else {
-                // Opção inválida
                 System.out.println("Opção inválida.");
             }
         }
 
-        // Fecha o scanner ao sair do sistema
         menuHandler.closeScanner();
     }
 }
