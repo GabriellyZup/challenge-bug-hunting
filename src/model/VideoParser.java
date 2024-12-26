@@ -13,11 +13,11 @@ public class VideoParser {
         try {
             String[] parts = line.split(";");
             return new VideoModel(
-                    parts[0],
-                    parts[1],
-                    Integer.parseInt(parts[2]),
-                    parts[3],
-                    sdf.parse(parts[4])
+                    parts[0], //title
+                    parts[1], //descript
+                    Integer.parseInt(parts[2]), //duration
+                    parts[3], //category
+                    sdf.parse(parts[4]) //day publication
             );
         } catch (Exception e) {
             return null;

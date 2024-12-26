@@ -2,33 +2,59 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class Video {
-    public String titulo;
-    public String descricao;
-    public int duracao; // em minutos
-    public String categoria;
-    public Date dataPublicacao;
+    private String title;
+    private String description;
+    private int duration; // in minutes
+    private String category;
+    private Date publicationDate;
 
-    public Video(String titulo, String descricao, int duracao, String categoria, Date dataPublicacao) {
-        this.titulo = titulo;
-        this.descricao = descricao;
-        this.duracao = duracao;
-        this.categoria = categoria;
-        this.dataPublicacao = dataPublicacao;
+    // Constructor
+    public Video(String title, String description, int duration, String category, Date publicationDate) {
+        this.title = title;
+        this.description = description;
+        this.duration = duration;
+        this.category = category;
+        this.publicationDate = publicationDate;
     }
 
-    @Override
-    public String toString() {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-        return titulo + ";" + descricao + ";" + duracao + ";" + categoria + ";" + sdf.format(dataPublicacao);
+    // Getters and Setters
+    public String getTitle() {
+        return title;
     }
 
-    public static Video fromString(String linha) {
-        try {
-            String[] partes = linha.split(";");
-            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-            return new Video(partes[0], partes[1], Integer.parseInt(partes[2]), partes[3], sdf.parse(partes[4]));
-        } catch (Exception e) {
-            return null; // Ignora erros de parsing
-        }
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public int getDuration() {
+        return duration;
+    }
+
+    public void setDuration(int duration) {
+        this.duration = duration;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public Date getPublicationDate() {
+        return publicationDate;
+    }
+
+    public void setPublicationDate(Date publicationDate) {
+        this.publicationDate = publicationDate;
     }
 }
