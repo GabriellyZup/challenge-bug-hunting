@@ -1,3 +1,5 @@
+//responsável apenas por representar os dados de um vídeo
+
 package model;
 
 import java.text.SimpleDateFormat;

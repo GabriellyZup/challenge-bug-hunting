@@ -1,38 +1,54 @@
 package main;
 
 import model.Video;
+import UserInterface.MenuHandler;
 import repository.FileVideoRepository;
 import service.VideoService;
 import service.VideoServiceImpl;
 import strategy.SearchStrategy;
 import strategy.TitleSearchStrategy;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
+//import java.text.SimpleDateFormat;
+//import java.util.Date;
 import java.util.List;
-import java.util.Scanner;
+//import java.util.Scanner;
 
 public class Main {
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
+        MenuHandler = menuHandler = new MenuHandler();
+
+        //Scanner scanner = new Scanner(System.in);
         VideoService videoService = new VideoServiceImpl(new FileVideoRepository("videos.txt"));
         SearchStrategy searchStrategy = new TitleSearchStrategy();
 
         while (true) {
-            System.out.println("\n=== Sistema de Gerenciamento de Vídeos ===");
-            System.out.println("1. Adicionar vídeo");
-            System.out.println("2. Listar vídeos");
-            System.out.println("3. Pesquisar vídeo por título");
-            System.out.println("4. Sair");
-            System.out.print("Escolha uma opção: ");
-            int opcao = scanner.nextInt();
-            scanner.nextLine(); // Consumir a quebra de linha
 
-            if (opcao == 1) {
-                System.out.print("Digite o título do vídeo: ");
-                String titulo = scanner.nextLine();
+            /**
+           System.out.println("\n=== Sistema de Gerenciamento de Vídeos ===");
+           System.out.println("1. Adicionar vídeo");
+           System.out.println("2. Listar vídeos");
+           System.out.println("3. Pesquisar vídeo por título");
+           System.out.println("4. Sair");
+           System.out.print("Escolha uma opção: ");
+             **/
+
+           int option = menuHandler.displayMenu(); // Exibe o menu e captura a opção
+           menuHandler.getScanner().nextLine();
+
+
+            if (option == 1) {
+                Video video = videoInputHandler.captureVideo();
+                if (video != null) {
+                    videoService.addVideo(video);
+                    System.out.println("Vídeo adicionado com sucesso!");
+                }
+
+
+                /**
+                System.out.println("Digite o título do vídeo: ");
+                //String titulo = scanner.nextLine();
                 System.out.print("Digite a descrição do vídeo: ");
-                String descricao = scanner.nextLine();
+                //String descricao = scanner.nextLine();
                 System.out.print("Digite a duração do vídeo (em minutos): ");
                 int duracao = scanner.nextInt();
                 scanner.nextLine(); // Consumir a quebra de linha
@@ -50,19 +66,21 @@ public class Main {
                 } catch (Exception e) {
                     System.out.println("Erro ao adicionar vídeo.");
                 }
-            } else if (opcao == 2) {
+                **/
+
+            } else if (option == 2) {
                 List<Video> videos = videoService.listVideos();
                 for (Video video : videos) {
                     System.out.println(video);
                 }
-            } else if (opcao == 3) {
+            } else if (option == 3) {
                 System.out.print("Digite o título para busca: ");
-                String query = scanner.nextLine();
-                List<Video> resultados = searchStrategy.search(videoService.listVideos(), query);
-                for (Video video : resultados) {
+                String query = menuHandler.getScanner().nextLine();
+                List<Video> results = searchStrategy.search(videoService.listVideos(), query);
+                for (Video video : results) {
                     System.out.println(video);
                 }
-            } else if (opcao == 4) {
+            } else if (option == 4) {
                 System.out.println("Saindo do sistema...");
                 break;
             } else {
@@ -70,6 +88,6 @@ public class Main {
             }
         }
 
-        scanner.close();
+        MenuHandler.closeScanner();
     }
 }
