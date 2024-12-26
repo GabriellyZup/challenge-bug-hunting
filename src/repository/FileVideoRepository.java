@@ -1,6 +1,6 @@
 package repository;
 
-import model.Video;
+import model.VideoModel;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -14,7 +14,7 @@ public class FileVideoRepository implements VideoRepository {
     }
 
     @Override
-    public void save(Video video) {
+    public void save(VideoModel video) {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(file, true))) {
             bw.write(video.toString());
             bw.newLine();
@@ -24,12 +24,12 @@ public class FileVideoRepository implements VideoRepository {
     }
 
     @Override
-    public List<Video> findAll() {
-        List<Video> videos = new ArrayList<>();
+    public List<VideoModel> findAll() {
+        List<VideoModel> videos = new ArrayList<>();
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             String line;
             while ((line = br.readLine()) != null) {
-                Video video = Video.fromString(line);
+                VideoModel video = VideoModel.fromString(line);
                 if (video != null) {
                     videos.add(video);
                 }

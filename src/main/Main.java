@@ -1,6 +1,6 @@
 package main;
 
-import model.Video;
+import model.VideoModel;
 import UserInterface.MenuHandler;
 import repository.FileVideoRepository;
 import service.VideoService;
@@ -37,7 +37,7 @@ public class Main {
 
 
             if (option == 1) {
-                Video video = videoInputHandler.captureVideo();
+                VideoModel video = videoInputHandler.captureVideo();
                 if (video != null) {
                     videoService.addVideo(video);
                     System.out.println("Vídeo adicionado com sucesso!");
@@ -69,15 +69,15 @@ public class Main {
                 **/
 
             } else if (option == 2) {
-                List<Video> videos = videoService.listVideos();
-                for (Video video : videos) {
+                List<VideoModel> videos = videoService.listVideos();
+                for (VideoModel video : videos) {
                     System.out.println(video);
                 }
             } else if (option == 3) {
                 System.out.print("Digite o título para busca: ");
                 String query = menuHandler.getScanner().nextLine();
-                List<Video> results = searchStrategy.search(videoService.listVideos(), query);
-                for (Video video : results) {
+                List<VideoModel> results = searchStrategy.search(videoService.listVideos(), query);
+                for (VideoModel video : results) {
                     System.out.println(video);
                 }
             } else if (option == 4) {

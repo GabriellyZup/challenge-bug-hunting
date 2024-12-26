@@ -1,6 +1,6 @@
 package service;
 
-import model.Video;
+import model.VideoModel;
 import repository.VideoRepository;
 
 import java.util.List;
@@ -13,12 +13,12 @@ public class VideoServiceImpl implements VideoService {
     }
 
     @Override
-    public void addVideo(Video video) {
+    public void addVideo(VideoModel video) {
         repository.save(video);
     }
 
     @Override
-    public List<Video> listVideos() {
+    public List<VideoModel> listVideos() {
         return repository.findAll();
     }
 }
