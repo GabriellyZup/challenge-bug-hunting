@@ -29,7 +29,7 @@ public class Main {
             System.out.print("Escolha uma opção: ");
 
             int option = fileHandler.getScanner().nextInt();
-            fileHandler.getScanner().nextLine(); // Consumir a quebra de linha
+            fileHandler.getScanner().nextLine();
 
             if (option == 1) {
                 VideoModel video = fileHandler.captureVideo();

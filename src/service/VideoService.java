@@ -7,4 +7,5 @@ import java.util.List;
 public interface VideoService {
     void addVideo(VideoModel video);
     List<VideoModel> listVideos();
+    List<VideoModel> searchByTitle(String title);
 }
