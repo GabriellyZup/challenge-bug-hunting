@@ -5,10 +5,10 @@ import repository.VideoRepository;
 
 import java.util.List;
 
-public class VideoServiceImpl implements VideoService {
+public class VideoManager implements VideoService {
     private final VideoRepository repository;
 
-    public VideoServiceImpl(VideoRepository repository) {
+    public VideoManager(VideoRepository repository) {
         this.repository = repository;
     }
 

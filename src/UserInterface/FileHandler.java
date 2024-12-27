@@ -1,12 +1,15 @@
 package UserInterface;
 
 import model.VideoModel;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Scanner;
 
-public class MenuHandler {
+public class FileHandler {
     private final Scanner scanner;
 
-    public MenuHandler(){
+    public FileHandler(){
         this.scanner = new Scanner(System.in);
     }
 
@@ -32,7 +35,9 @@ public class MenuHandler {
 
     // Captura os dados de um vídeo e retorna um objeto VideoModel
     public VideoModel captureVideo() {
+        VideoModel videoModel = null;
         scanner.nextLine();
+        
         System.out.println("\n=== Capturar Vídeo ===");
         System.out.print("Digite o título do vídeo: ");
         String title = scanner.nextLine();
@@ -41,9 +46,24 @@ public class MenuHandler {
         System.out.print("Digite a duração do vídeo (em minutos): ");
         int duration = scanner.nextInt();
         scanner.nextLine();
+        System.out.println("Digite a categoria do video: ");
+        String category = scanner.nextLine();
+        System.out.print("Digite a data de publicação (dd/MM/yyyy): ");
+        String dataStr = scanner.nextLine();
 
-        // Retorna um novo objeto VideoModel com os dados capturados
-        return new VideoModel(title, description, duration);
+        try {
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            Date dataPublicacao = sdf.parse(dataStr);
+            videoModel = new VideoModel(title, description, duration, category, dataPublicacao);
+            
+            System.out.println("Vídeo adicionado com sucesso!");
+        } catch (Exception e) {
+            System.out.println("Erro ao adicionar vídeo.");
+        }
+        scanner.nextLine();
+
+       
+        return videoModel;
     }
 }
 
