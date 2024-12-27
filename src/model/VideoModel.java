@@ -107,7 +107,7 @@ public class VideoModel {
         try {
             String[] parts = line.split(";");
             if (parts.length != 5) {
-                throw new IllegalArgumentException("Invalid input format. Expected 5 fields separated by ';'.");
+                throw new IllegalArgumentException("Formato de dados invalido. São esperados 5 dados separados por ';'.");
             }
 
             String title = parts[0];
