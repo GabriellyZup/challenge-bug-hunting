@@ -1,11 +1,11 @@
 
-package model;
-
-public enum VideoParser {
-    MOVIE,
-    SERIES,
-    DOCUMENTARY
-}
+//package model;
+//
+//public enum VideoCategory {
+//    MOVIE,
+//    SERIES,
+//    DOCUMENTARY
+//}
 
 
 //package model;

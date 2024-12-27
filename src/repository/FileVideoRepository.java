@@ -37,7 +37,8 @@ public class FileVideoRepository implements VideoRepository {
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             String line;
             while ((line = br.readLine()) != null) {
-                VideoModel video = VideoModel.fromString(line);
+                VideoModel video;
+                video = VideoModel.fromString(line);
                 if (video != null) {
                     videos.add(video);
                 }

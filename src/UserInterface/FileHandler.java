@@ -53,8 +53,8 @@ public class FileHandler {
 
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-            Date dataPublicacao = sdf.parse(dataStr);
-            videoModel = new VideoModel(title, description, duration, category, dataPublicacao);
+            Date publicationDate = sdf.parse(dataStr);
+            //videoModel = new VideoModel(title, description, duration, category, publicationDate);
             
             System.out.println("Vídeo adicionado com sucesso!");
         } catch (Exception e) {

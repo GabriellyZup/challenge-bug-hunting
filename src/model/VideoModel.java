@@ -14,7 +14,6 @@ public class VideoModel {
     private String title;
     private String description;
     private int duration;
-    private String category;
     private VideoCategory category;
     private Date publicationDate;
 
@@ -51,22 +50,22 @@ public class VideoModel {
         return publicationDate;
     }
 
-    // Validation methods
+    // Validações
     private void validateTitle(String title) {
         if (title == null || title.trim().isEmpty()) {
-            throw new IllegalArgumentException("Title cannot be empty.");
+            throw new IllegalArgumentException("Insira o título do vídeo. Este campo não pode estar vazio");
         }
     }
 
     private void validateDescription(String description) {
         if (description == null || description.trim().isEmpty()) {
-            throw new IllegalArgumentException("Description cannot be empty.");
+            throw new IllegalArgumentException("Insira a descrição do vídeo. Este campo não pode esta vazio.");
         }
     }
 
     private void validateDuration(int duration) {
         if (duration <= 0) {
-            throw new IllegalArgumentException("Duration must be a positive number.");
+            throw new IllegalArgumentException("A duração precisa ser um número inteiro (exemplo: 3).");
         }
     }
 
@@ -76,34 +75,57 @@ public class VideoModel {
         try {
             return dateFormat.parse(date);
         } catch (ParseException e) {
-            throw new IllegalArgumentException("Invalid date format. Use dd/MM/yyyy.");
+            throw new IllegalArgumentException("Formato de data inválida. Use dd/MM/yyyy.");
         }
     }
 
-    // toString method for debugging or display purposes
-    @Override
-    public String toString() {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        return "VideoModel{" +
-                "title='" + title + '\'' +
-                ", description='" + description + '\'' +
-                ", duration=" + duration +
-                ", category=" + category +
-                ", publicationDate=" + dateFormat.format(publicationDate) +
-                '}';
-    }
-}
-
+    // toString para parse
 //    @Override
 //    public String toString() {
-//        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-//        return title + ";" + description + ";" + duration + ";" + category + ";" + sdf.format(publicationDate);
+//        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+//        return "VideoModel{" +
+//                "title='" + title + '\'' +
+//                ", description='" + description + '\'' +
+//                ", duration=" + duration +
+//                ", category=" + category +
+//                ", publicationDate=" + dateFormat.format(publicationDate) +
+//                '}';
 //    }
-//
+//}
+
+    @Override
+    public String toString() {
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        return title + ";" + description + ";" + duration + ";" + category + ";" + sdf.format(publicationDate);
+    }
+
+    public static VideoModel fromString(String line) {
+        if (line == null || line.trim().isEmpty()) {
+            throw new IllegalArgumentException("Preencha todos os campos para continuar.");
+        }
+
+        try {
+            String[] parts = line.split(";");
+            if (parts.length != 5) {
+                throw new IllegalArgumentException("Invalid input format. Expected 5 fields separated by ';'.");
+            }
+
+            String title = parts[0];
+            String description = parts[1];
+            int duration = Integer.parseInt(parts[2]);
+            VideoCategory category = VideoCategory.valueOf(parts[3].toUpperCase());
+            String publicationDate = parts[4];
+
+            return new VideoModel(title, description, duration, category, publicationDate);
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Error parsing input line: " + e.getMessage(), e);
+        }
+    }
+}
 //
 //    public static VideoModel fromString(String linha) {
 //        try {
-//            String[] partes = linha.split(";");
+//            String[] parts = linha.split(";");
 //            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 //            return new VideoModel(partes[0], partes[1], Integer.parseInt(partes[2]), partes[3], sdf.parse(partes[4]));
 //        } catch (Exception e) {
