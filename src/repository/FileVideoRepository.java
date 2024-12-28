@@ -49,4 +49,16 @@ public class FileVideoRepository implements VideoRepository {
         }
         return videos;
     }
+
+    // Novo método saveAll para salvar uma lista de vídeos
+    public void saveAll(List<VideoModel> videos) {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(file, true))) {
+            for (VideoModel video : videos) {
+                bw.write(video.toString());
+                bw.newLine();
+            }
+        } catch (IOException e) {
+            // Ignorar erros por enquanto
+        }
+    }
 }
