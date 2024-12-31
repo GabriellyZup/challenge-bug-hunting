@@ -5,6 +5,7 @@ import model.VideoModel;
 import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class FileVideoRepository implements VideoRepository {
     private final File file;
@@ -18,6 +19,11 @@ public class FileVideoRepository implements VideoRepository {
         } catch (IOException e) {
             throw new RuntimeException("Falha ao incializar o  repositório: " + e.getMessage(), e);
         }
+    }
+
+    @Override
+    public void deletedByTitle(String title) {
+
     }
 
     @Override
@@ -37,8 +43,7 @@ public class FileVideoRepository implements VideoRepository {
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             String line;
             while ((line = br.readLine()) != null) {
-                VideoModel video;
-                video = VideoModel.fromString(line);
+                VideoModel video = VideoModel.fromString(line);
                 if (video != null) {
                     videos.add(video);
                 }
@@ -51,14 +56,24 @@ public class FileVideoRepository implements VideoRepository {
     }
 
     // Novo método saveAll para salvar uma lista de vídeos
+    @Override
     public void saveAll(List<VideoModel> videos) {
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(file, true))) {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(file))) {
             for (VideoModel video : videos) {
                 bw.write(video.toString());
                 bw.newLine();
             }
         } catch (IOException e) {
-            // Ignorar erros por enquanto
+            throw new RuntimeException("Erro ao salvar lista de videos: " + e.getMessage(), e);                  // Ignorar erros por enquanto
         }
+    }
+    //@Override
+    public void deleteByTitle(String title) {
+        List<VideoModel> videos = findAll(); // Load all videos
+        List<VideoModel> updatedVideos = videos.stream()
+                .filter(video -> !video.getTitle().equalsIgnoreCase(title)) // Exclude the video with the given title
+                .collect(Collectors.toList());
+
+        saveAll(updatedVideos); // Save the updated list back to the file
     }
 }

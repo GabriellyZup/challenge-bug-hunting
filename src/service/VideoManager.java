@@ -3,13 +3,17 @@ package service;
 import model.VideoModel;
 import repository.VideoRepository;
 
-import java.util.List;
-import java.util.ArrayList;
+import java.text.SimpleDateFormat;
+import java.text.ParseException;
+//import java.util.List;
+import java.util.*;
+//import java.util.ArrayList;
 import java.util.stream.Collectors;
 import java.util.Comparator;
 
 public class VideoManager implements VideoService {
     private final VideoRepository repository;
+    private static final String DATE_FORMAT = "dd/MM/yyyy";
 
     public VideoManager(VideoRepository repository) {
         this.repository = repository;
@@ -17,6 +21,7 @@ public class VideoManager implements VideoService {
 
     @Override
     public void addVideo(VideoModel video) {
+        validateAndSetPublicationDate(video);
         repository.save(video);
     }
 
@@ -44,25 +49,33 @@ public class VideoManager implements VideoService {
                 .collect(Collectors.toList());
     }
 
-    public boolean editVideo(int id, VideoModel updatedVideo) {
+    /**
+     * @param title
+     * @param updatedVideo
+     * @return
+     */
+    public boolean editVideo(String title, VideoModel updatedVideo) {
         List<VideoModel> allVideos = repository.findAll();
         for (VideoModel video : allVideos) {
-            if (video.getId() == id) {
+            if (video.getTitle().equalsIgnoreCase(title)) {
                 video.setTitle(updatedVideo.getTitle());
+                video.setDescription(updatedVideo.getDescription());
+                video.setDuration(updatedVideo.getDuration());
                 video.setCategory(updatedVideo.getCategory());
-                video.setDate(updatedVideo.getDate());
-                repository.save(video); // Atualiza repo
+                //video.setDate(updatedVideo.getDate());
+                //repository.save(video); // Atualiza repo
+                video.setPublicationDate /*(new SimpleDateFormat("dd/MM/yyyy").format*/(updatedVideo.getPublicationDate());
+                repository.saveAll(allVideos);
                 return true;
             }
         }
         return false; // Retorna false se o vídeo não for encontrado
     }
 
-    // Excluir vídeo
-    public boolean deleteVideo(int id) {
+    public boolean deleteVideo(String title) {
         List<VideoModel> allVideos = repository.findAll();
         VideoModel videoToDelete = allVideos.stream()
-                .filter(video -> video.getId() == id)
+                .filter(video -> video.getTitle().equalsIgnoreCase(title))
                 .findFirst()
                 .orElse(null);
 
@@ -77,8 +90,26 @@ public class VideoManager implements VideoService {
     // Filtrar vídeos por categoria
     public List<VideoModel> filterVideosByCategory(String category) {
         return repository.findAll().stream()
-                .filter(video -> video.getCategory().equalsIgnoreCase(category))
+                .filter(video -> video.getCategory().name().equalsIgnoreCase(category))
                 .collect(Collectors.toList());
+    }
+
+    public List<VideoModel> sortVideosByPublicationDate(boolean reverse){
+        return repository.findAll().stream()
+                .sorted(Comparator.comparing(VideoModel::getPublicationDate, reverse ? Comparator.reverseOrder() : Comparator.naturalOrder()))
+                .collect(Collectors.toList());
+    }
+
+
+    public Map<String, Object> generateStatistics() {
+        List<VideoModel> allVideos = repository.findAll();
+
+        Map<String, Object> stats = new HashMap<>();
+        stats.put("Total de videos", allVideos.size());
+        stats.put("Duração total", allVideos.stream().mapToInt(VideoModel::getDuration).sum()); // Corrigido
+        stats.put("Videos por categoria", allVideos.stream()
+                .collect(Collectors.groupingBy(video -> video.getCategory().name(), Collectors.counting()))); // Corrigido
+        return stats;
     }
 
     // Ordenar vídeos por uma chave específica
@@ -86,14 +117,14 @@ public class VideoManager implements VideoService {
         Comparator<VideoModel> comparator;
 
         switch (key.toLowerCase()) {
-            case "title":
+            case "titulo":
                 comparator = Comparator.comparing(VideoModel::getTitle);
                 break;
-            case "category":
+            case "categoria":
                 comparator = Comparator.comparing(VideoModel::getCategory);
                 break;
-            case "date":
-                comparator = Comparator.comparing(VideoModel::getDate);
+            case "data":
+                comparator = Comparator.comparing(VideoModel::getPublicationDate);
                 break;
             default:
                 throw new IllegalArgumentException("Critério de busca inválido, tente titulo, categoria ou data: " + key);
@@ -106,6 +137,23 @@ public class VideoManager implements VideoService {
         return repository.findAll().stream()
                 .sorted(comparator)
                 .collect(Collectors.toList());
+    }
+
+    // Método utilitário para validar e definir a data de publicação
+    private void validateAndSetPublicationDate(VideoModel video) {
+
+            if (video.getPublicationDate() == null) {
+                throw new IllegalArgumentException("A data de publicação não pode ser nula.");
+            }
+            try {
+                SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
+                sdf.setLenient(false); // Validação rigorosa
+                Date validatedDate = sdf.parse(sdf.format(video.getPublicationDate()));
+                video.setPublicationDate(validatedDate);
+            } catch (ParseException e) {
+                throw new IllegalArgumentException("Data de publicação inválida. Use o formato " + DATE_FORMAT + ".");
+            }
+
     }
 }
 
