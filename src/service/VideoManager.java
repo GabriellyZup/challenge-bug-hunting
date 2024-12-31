@@ -134,6 +134,7 @@ public class VideoManager implements VideoService {
             comparator = comparator.reversed();
         }
 
+
         return repository.findAll().stream()
                 .sorted(comparator)
                 .collect(Collectors.toList());
