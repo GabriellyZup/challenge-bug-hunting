@@ -9,44 +9,8 @@ import java.time.LocalDate;
 
 public class VideoModel {
 
-    public void setPublicationDate(Date publicationDate) {
-        if (publicationDate == null) {
-            throw new IllegalArgumentException(" A data de publicação precisa ser preenchida.");
-        }
-        //this.publicationDate = validateAndParseDate(publicationDate);
-    }
 
-    public void setTitle(String title) {
-        validateTitle(title);
-        this.title = title;
-    }
 
-    public void setDescription(String description) {
-        validateDescription(description);
-        this.description = description;
-    }
-
-    public void setDuration(int duration) {
-        validateDuration(duration);
-        this.duration = duration;
-    }
-
-    public void setCategory(VideoCategory category) {
-        this.category = category;
-    }
-
-    public enum VideoCategory {
-        VIDEO, SERIE, DOCUMENTARIO;
-
-        public static VideoCategory fromString(String category) {
-            try{
-                return VideoCategory.valueOf(category.toUpperCase());
-            } catch (IllegalArgumentException e) {
-                throw new IllegalArgumentException("Categoria invelida. Use FILME, SERIE ou DOCUMENTARIO.");
-            }
-                //return false;
-        }
-    }
     private String title;
     private String description;
     private int duration;
@@ -73,7 +37,7 @@ public class VideoModel {
         this.publicationDate = validateAndParseDate(publicationDate);
     }
 
-    public VideoModel(String title, String description, int duration, String category, String publicationDate) {
+    public VideoModel create (String title, String description, int duration, String category, String publicationDate) {
         this(
                 title,
                 description,
@@ -81,6 +45,32 @@ public class VideoModel {
                 VideoCategory.fromString(category), // Converte a categoria
                 validateAndParseDate(publicationDate) // Valida e converte a data
         );
+    }
+
+    public void setPublicationDate(Date publicationDate) {
+        if (publicationDate == null) {
+            throw new IllegalArgumentException(" A data de publicação precisa ser preenchida.");
+        }
+        //this.publicationDate = validateAndParseDate(publicationDate);
+    }
+
+    public void setTitle(String title) {
+        validateTitle(title);
+        this.title = title;
+    }
+
+    public void setDescription(String description) {
+        validateDescription(description);
+        this.description = description;
+    }
+
+    public void setDuration(int duration) {
+        validateDuration(duration);
+        this.duration = duration;
+    }
+
+    public void setCategory(VideoCategory category) {
+        this.category = category;
     }
 
     public String getTitle() {
@@ -148,7 +138,7 @@ public class VideoModel {
 
     @Override
     public String toString() {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
         return title + ";" + description + ";" + duration + ";" + category + ";" + sdf.format(publicationDate);
     }
 
@@ -172,6 +162,18 @@ public class VideoModel {
             return new VideoModel(title, description, duration, category, publicationDate);
         } catch (Exception e) {
             throw new IllegalArgumentException("Erro ao processar a linha de entrada: " + e.getMessage(), e);
+        }
+    }
+    public enum VideoCategory {
+        VIDEO, SERIE, DOCUMENTARIO;
+
+        public static VideoCategory fromString(String category) {
+            try{
+                return VideoCategory.valueOf(category.toUpperCase());
+            } catch (IllegalArgumentException e) {
+                throw new IllegalArgumentException("Categoria invelida. Use FILME, SERIE ou DOCUMENTARIO.");
+            }
+            //return false;
         }
     }
 }
