@@ -2,14 +2,14 @@
 
 package model;
 
+import javax.swing.text.DateFormatter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.time.LocalDate;
+import java.util.logging.FileHandler;
 
 public class VideoModel {
-
-
 
     private String title;
     private String description;
@@ -37,21 +37,12 @@ public class VideoModel {
         this.publicationDate = validateAndParseDate(publicationDate);
     }
 
-    public VideoModel create (String title, String description, int duration, String category, String publicationDate) {
-        this(
-                title,
-                description,
-                duration,
-                VideoCategory.fromString(category), // Converte a categoria
-                validateAndParseDate(publicationDate) // Valida e converte a data
-        );
-    }
 
     public void setPublicationDate(Date publicationDate) {
         if (publicationDate == null) {
             throw new IllegalArgumentException(" A data de publicação precisa ser preenchida.");
         }
-        //this.publicationDate = validateAndParseDate(publicationDate);
+        this.publicationDate = publicationDate;
     }
 
     public void setTitle(String title) {
@@ -96,7 +87,7 @@ public class VideoModel {
     // Validações
     private void validateTitle(String title) {
         if (title == null || title.trim().isEmpty()) {
-            throw new IllegalArgumentException("O titula não pode estar vazio");
+            throw new IllegalArgumentException("O titulo não pode estar vazio");
         }
     }
 
@@ -116,9 +107,9 @@ public class VideoModel {
         SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
         dateFormat.setLenient(false);
         try {
-            return dateFormat.parse(date);
+            return DATE_FORMATTER.parse(date.trim());
         } catch (ParseException e) {
-            throw new IllegalArgumentException("Formato de data inválida. Use dd/MM/yyyy.");
+            throw new IllegalArgumentException("Formato de data inválido. Use dd/MM/yyyy.");
         }
     }
 
@@ -138,8 +129,8 @@ public class VideoModel {
 
     @Override
     public String toString() {
-        SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
-        return title + ";" + description + ";" + duration + ";" + category + ";" + sdf.format(publicationDate);
+        //SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
+        return title + "; " + description + "; " + duration + "; " + category + "; " + DATE_FORMATTER.format(publicationDate);
     }
 
     public static VideoModel fromString(String line) {
@@ -153,28 +144,44 @@ public class VideoModel {
                 throw new IllegalArgumentException("Formato de dados invalido. São esperados 5 campos separados por ';'.");
             }
 
-            String title = parts[0];
-            String description = parts[1];
-            int duration = Integer.parseInt(parts[2]);
-            VideoCategory category = VideoCategory.fromString(parts[3]);
-            String publicationDate = parts[4];
+            String title = parts[0].trim();
+            String description = parts[1].trim();
+            int duration = Integer.parseInt(parts[2].trim());
+            String categoryStr = parts[3].trim();
+            String publicationDateStr = parts[4].trim();
 
-            return new VideoModel(title, description, duration, category, publicationDate);
+            VideoCategory category = VideoCategory.fromString(categoryStr);
+            Date publicationDate = DATE_FORMATTER.parse(publicationDateStr);
+
+
+            return new VideoModel(title, description, duration, category, publicationDateStr);
         } catch (Exception e) {
             throw new IllegalArgumentException("Erro ao processar a linha de entrada: " + e.getMessage(), e);
         }
     }
+
     public enum VideoCategory {
         VIDEO, SERIE, DOCUMENTARIO;
 
         public static VideoCategory fromString(String category) {
+            if (category == null || category.trim().isEmpty()){
+                throw new IllegalArgumentException("Categoria inválida. Use FILME, SERIE ou DOCUMENTARIO.");
+            }
+            //String upperCategory = category.trim().toUpperCase();
             try{
-                return VideoCategory.valueOf(category.toUpperCase());
+                return VideoCategory.valueOf(category.trim().toUpperCase());
             } catch (IllegalArgumentException e) {
-                throw new IllegalArgumentException("Categoria invelida. Use FILME, SERIE ou DOCUMENTARIO.");
+                throw new IllegalArgumentException("Categoria inválida. Use FILME, SERIE ou DOCUMENTÁRIO.");
+
             }
             //return false;
         }
+
+//        private static String upperCategory() {
+//            return null;
+//        }
+
+
     }
 }
 //

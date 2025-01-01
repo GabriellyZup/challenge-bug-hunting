@@ -23,7 +23,7 @@ public class FileVideoRepository implements VideoRepository {
 
     @Override
     public void deletedByTitle(String title) {
-
+        deletedByTitle(title);
     }
 
     @Override
@@ -32,7 +32,7 @@ public class FileVideoRepository implements VideoRepository {
             bw.write(video.toString());
             bw.newLine();
         } catch (IOException e) {
-//            System.err.println("Erro ao salvar video: " + e.getMessage());
+            throw new RuntimeException("Erro ao salvar video: " + e.getMessage());
             // Ignorar erros por enquanto
         }
     }
@@ -43,13 +43,17 @@ public class FileVideoRepository implements VideoRepository {
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
             String line;
             while ((line = br.readLine()) != null) {
-                VideoModel video = VideoModel.fromString(line);
-                if (video != null) {
-                    videos.add(video);
+                try{
+                    VideoModel video = VideoModel.fromString(line);
+                    if (video != null) {
+                        videos.add(video);
+                    }
+                } catch (Exception e) {
+                    throw new RuntimeException("Erro ao processaro a linha de entrada: " + e.getMessage(), e);
                 }
             }
         } catch (IOException e) {
-            //System.err.println("Erro ao ler videos: " + e.getMessage());
+            throw new RuntimeException("Erro ao ler videos: " + e.getMessage(), e);
             // Ignorar erros por enquanto
         }
         return videos;

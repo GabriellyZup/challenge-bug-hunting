@@ -1,7 +1,7 @@
 package main;
 
-import model.VideoModel;
-import UserInterface.FileHandler;
+
+import userInterface.FileHandler;
 import repository.FileVideoRepository;
 import service.VideoService;
 import service.VideoManager;
@@ -11,6 +11,7 @@ import strategy.TitleSearchStrategy;
 import java.text.ParseException;
 import java.util.List;
 import java.util.Map;
+import model.VideoModel;
 import java.util.Map.Entry;
 
 
@@ -74,22 +75,8 @@ public class Main {
                     } else {
                         results.forEach(System.out::println);
                     }
-//            }
-//
-//            else if (option == 4) {
-//                System.out.print("Digite o título do vídeo a ser editado: ");
-//                String title = fileHandler.getScanner().nextLine();
-//                VideoModel video = fileHandler.captureVideo();
-//                if (video != null) {
-//                    // Implementar lógica de edição no VideoService
-//                    System.out.println("Vídeo editado com sucesso!");
-//                }
-//            } else if (option == 5) {
-//                System.out.print("Digite o título do vídeo a ser excluído: ");
-//                String title = fileHandler.getScanner().nextLine();
-//                // Implementar lógica de exclusão no VideoService
-//                System.out.println("Vídeo excluído com sucesso!");
-            }
+                }
+
                 case 4 -> {
                     System.out.print("Digite o título do vídeo a ser editado: ");
                     String title = fileHandler.getScanner().nextLine();
@@ -114,46 +101,48 @@ public class Main {
 
 
 
-            case 6 -> {
-                System.out.print("Digite a categoria para filtrar: ");
-                String category = fileHandler.getScanner().nextLine();
-                List<VideoModel> filteredVideos = videoService.filterVideosByCategory(category);
-                if (filteredVideos.isEmpty()) {
-                    System.out.println("Nenhum vídeo encontrado para a categoria: " + category);
-                } else {
+                case 6 -> {
+                    System.out.print("Digite a categoria para filtrar: ");
+                    String category = fileHandler.getScanner().nextLine();
+                    List<VideoModel> filteredVideos = videoService.filterVideosByCategory(category);
+                    if (filteredVideos.isEmpty()) {
+                        System.out.println("Nenhum vídeo encontrado para a categoria: " + category);
+                    } else {
                     System.out.println("=== Vídeos na categoria: " + category + " ===");
                     filteredVideos.forEach(System.out::println);
+                    }
                 }
-            }
-            case 7 -> {
-                System.out.println("=== Ordenar vídeos por data de publicação ===");
-                System.out.print("Deseja ordenar em ordem reversa? (sim/não): ");
-                String reverseInput = fileHandler.getScanner().nextLine();
-                boolean reverse = reverseInput.equalsIgnoreCase("sim");
-                List<VideoModel> sortedVideos = videoService.sortVideosByPublicationDate(reverse);
-                if (sortedVideos.isEmpty()) {
-                    System.out.println("Nenhum vídeo encontrado.");
-                } else {
-                    sortedVideos.forEach(System.out::println);
+                    case 7 -> {
+                    System.out.println("=== Ordenar vídeos por data de publicação ===");
+                    System.out.print("Deseja ordenar em ordem reversa? (sim/não): ");
+                    String reverseInput = fileHandler.getScanner().nextLine();
+                    boolean reverse = reverseInput.equalsIgnoreCase("sim");
+                    List<VideoModel> sortedVideos = videoService.sortVideosByPublicationDate(reverse);
+                    if (sortedVideos.isEmpty()) {
+                        System.out.println("Nenhum vídeo encontrado.");
+                    } else {
+                        sortedVideos.forEach(System.out::println);
+                    }
                 }
-            }
-            case 8 -> {
-                System.out.println("=== Relatório de Estatísticas ===");
-                Map<String, Object> stats = videoService.generateStatistics();
-                System.out.println("Total de vídeos: " + stats.get("Total de videos"));
-                System.out.println("Duração total: " + stats.get("Duração total") + " minutos");
-                System.out.println("Vídeos por categoria:");
-                Map<String, Long> videosPorCategoria = (Map<String, Long>) stats.get("Videos por categoria");
-                for (Map.Entry<String, Long> entry : videosPorCategoria.entrySet()) {
-                    System.out.println("- " + entry.getKey() + ": " + entry.getValue() + " vídeo(s)");
+                case 8 -> {
+                    System.out.println("=== Relatório de Estatísticas ===");
+                    Map<String, Object> stats = videoService.generateStatistics();
+                    System.out.println("Total de vídeos: " + stats.get("Total de videos"));
+                    System.out.println("Duração total: " + stats.get("Duração total") + " minutos");
+                    System.out.println("Vídeos por categoria:");
+                    Map<String, Long> videosPorCategoria = (Map<String, Long>) stats.get("Videos por categoria");
+                    for (Map.Entry<String, Long> entry : videosPorCategoria.entrySet()) {
+                        System.out.println("- " + entry.getKey() + ": " + entry.getValue() + " vídeo(s)");
+                    }
                 }
-            }
-            case 9 -> {
-                System.out.println("Saindo do sistema...");
-                fileHandler.closeScanner();
-                return;
-            }
-                default -> System.out.println("Opção inválida.");
+                case 9 -> {
+                    System.out.println("Saindo do sistema...  Até logo!");
+                    fileHandler.closeScanner();
+                    return;
+                }
+
+                default -> System.out.println("Opção inválida. ");
+
             }
         }
 

@@ -1,7 +1,8 @@
-package UserInterface;
+package userInterface;
 
 import model.VideoModel;
 import model.VideoParser;
+
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -10,7 +11,7 @@ import java.util.Scanner;
 
 public class FileHandler {
     private final Scanner scanner;
-    private String publicationDataStr;
+    //private String publicationDataStr;
 
     public FileHandler() throws ParseException {
         this.scanner = new Scanner(System.in);
@@ -18,6 +19,8 @@ public class FileHandler {
 
 
     public int displayMenu() {
+        while (true) {
+            try{
         System.out.println("\n=== Gerenciador de Vídeos ===");
         System.out.println("1. Adicionar vídeo");
         System.out.println("2. Listar vídeos");
@@ -29,9 +32,16 @@ public class FileHandler {
         System.out.println("8. Exibir relatório de estatísticas");
         System.out.println("9. Sair");
         System.out.print("Escolha uma opção: ");
-        int option = scanner.nextInt();
-        scanner.nextLine();
-        return option;
+                int option = Integer.parseInt(scanner.nextLine().trim());
+                if (option >= 1 && option <= 9) {
+                    return option;
+                } else {
+                    System.out.println("Opção inválida. Por favor, escolha um número entre 1 e 9.");
+                }
+            } catch (NumberFormatException e) {
+                System.out.println("Entrada inválida. Por favor, insira um número válido.");
+            }
+        }
     }
 
     //fecha scanner
@@ -62,8 +72,9 @@ public class FileHandler {
                 throw new IllegalArgumentException("A duração deve ser maior que zero.");
             }
         } catch (NumberFormatException e) {
-            throw new IllegalArgumentException("A duração deve ser um numero inteiro válido.");
+            throw new IllegalArgumentException("A duração deve ser um número inteiro válido.");
         }
+
 
         //scanner.nextLine();
         System.out.println("Digite a categoria do video (FILME, SERIE, DOCUMENTÁRIO): ");
@@ -82,7 +93,7 @@ public class FileHandler {
             //Date publicationDate = sdf.parse(publicationDataStr);
             //return new VideoModel(title, description, duration, category, publicationDate);
         } catch (Exception e) {
-            System.out.println("Data de publicação invalida. Use o formato dd/mm/aaaa: ");
+            System.out.println("Data de publicação inválida. Use o formato dd/mm/aaaa: ");
 
             //return null;
         }

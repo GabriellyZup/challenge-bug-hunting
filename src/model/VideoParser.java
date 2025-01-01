@@ -9,7 +9,7 @@ public class VideoParser {
 
     private static final String DATE_FORMAT = "dd/MM/yyyy";
     private static final Set<String> VALID_CATEGORIES = Set.of("FILME", "SERIE", "DOCUMENTÁRIO");
-
+    private static final SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
     private VideoParser() {
         // Construtor privado para evitar instâncias
     }
@@ -25,10 +25,13 @@ public class VideoParser {
         if (dateStr == null || dateStr.isEmpty()) {
             throw new IllegalArgumentException("A data não pode ser nula ou vazia.");
         }
-        SimpleDateFormat dateFormatter = new SimpleDateFormat(DATE_FORMAT);
-        dateFormatter.setLenient(false); // Garante validação rigorosa
+
+//        SimpleDateFormat dateFormatter = new SimpleDateFormat(DATE_FORMAT);
+//        dateFormatter.setLenient(false); // Garante validação rigorosa
+        sdf.setLenient(false);
         try {
-            return dateFormatter.parse(dateStr);
+           // return dateFormatter.parse(dateStr);
+            return sdf.parse(dateStr);
         } catch (ParseException e) {
             throw new IllegalArgumentException("Data inválida. Use o formato " + DATE_FORMAT + ".");
         }
