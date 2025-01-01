@@ -163,7 +163,7 @@ public class VideoModel {
     public enum VideoCategory {
         VIDEO, SERIE, DOCUMENTARIO;
 
-        public static VideoCategory fromString(String category) {
+        public static VideoCategory validateAndParseCategory(String category) {
             if (category == null || category.trim().isEmpty()){
                 throw new IllegalArgumentException("Categoria inválida. Use FILME, SERIE ou DOCUMENTARIO.");
             }
@@ -171,10 +171,14 @@ public class VideoModel {
             try{
                 return VideoCategory.valueOf(category.trim().toUpperCase());
             } catch (IllegalArgumentException e) {
-                throw new IllegalArgumentException("Categoria inválida. Use FILME, SERIE ou DOCUMENTÁRIO.");
+                throw new IllegalArgumentException("Categoria inválida. Use FILME, SERIE ou DOCUMENTARIO.");
 
             }
             //return false;
+        }
+
+        public static VideoCategory fromString(String categoryStr) {
+            return null;
         }
 
 //        private static String upperCategory() {

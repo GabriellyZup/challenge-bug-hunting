@@ -87,7 +87,7 @@ public class VideoManager implements VideoService {
         return false; // Retorna false se o vídeo não for encontrado
     }
 
-    // Filtrar vídeos por categoria
+
     public List<VideoModel> filterVideosByCategory(String category) {
         return repository.findAll().stream()
                 .filter(video -> video.getCategory().name().equalsIgnoreCase(category))
@@ -140,7 +140,7 @@ public class VideoManager implements VideoService {
                 .collect(Collectors.toList());
     }
 
-    // Método utilitário para validar e definir a data de publicação
+    // Método
     private void validateAndSetPublicationDate(VideoModel video) {
 
             if (video.getPublicationDate() == null) {

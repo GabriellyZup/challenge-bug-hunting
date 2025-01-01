@@ -8,7 +8,7 @@ import java.util.Set;
 public class VideoParser {
 
     private static final String DATE_FORMAT = "dd/MM/yyyy";
-    private static final Set<String> VALID_CATEGORIES = Set.of("FILME", "SERIE", "DOCUMENTÁRIO");
+    private static final Set<String> VALID_CATEGORIES = Set.of("FILME", "SERIE", "DOCUMENTARIO");
     private static final SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
     private VideoParser() {
         // Construtor privado para evitar instâncias
@@ -46,13 +46,17 @@ public class VideoParser {
      */
     public static String validateCategory(String category) {
         if (category == null || category.isEmpty()) {
-            throw new IllegalArgumentException("A categoria não pode ser nula ou vazia.");
+            throw new IllegalArgumentException("A categoria não pode estar vazia.");
         }
         String upperCategory = category.trim().toUpperCase();
         if (!VALID_CATEGORIES.contains(upperCategory)) {
             throw new IllegalArgumentException("Categoria inválida. As categorias válidas são: " + VALID_CATEGORIES);
         }
         return upperCategory;
+    }
+
+    public static VideoModel.VideoCategory validateAndParseCategory(String categoryInput) {
+        return null;
     }
 }
 

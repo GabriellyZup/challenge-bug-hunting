@@ -62,7 +62,7 @@ public class FileVideoRepository implements VideoRepository {
     // Novo método saveAll para salvar uma lista de vídeos
     @Override
     public void saveAll(List<VideoModel> videos) {
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(file))) {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(file, true))) {
             for (VideoModel video : videos) {
                 bw.write(video.toString());
                 bw.newLine();
