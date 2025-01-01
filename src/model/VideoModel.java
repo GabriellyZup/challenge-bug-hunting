@@ -129,7 +129,7 @@ public class VideoModel {
 
     @Override
     public String toString() {
-        //SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
+        SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
         return title + "; " + description + "; " + duration + "; " + category + "; " + DATE_FORMATTER.format(publicationDate);
     }
 
