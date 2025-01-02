@@ -8,19 +8,12 @@ import java.util.Set;
 public class VideoParser {
 
     private static final String DATE_FORMAT = "dd/MM/yyyy";
-    private static final Set<String> VALID_CATEGORIES = Set.of("FILME", "SERIE", "DOCUMENTARIO");
+
     private static final SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
     private VideoParser() {
         // Construtor privado para evitar instâncias
     }
 
-    /**
-     * Faz o parsing de uma string para um objeto Date.
-     *
-     * @param dateStr A string representando a data no formato dd/MM/yyyy.
-     * @return Um objeto Date correspondente à string fornecida.
-     * @throws IllegalArgumentException Se a string for nula, vazia ou inválida.
-     */
     public static Date parseDate(String dateStr) {
         if (dateStr == null || dateStr.isEmpty()) {
             throw new IllegalArgumentException("A data não pode ser nula ou vazia.");
@@ -37,27 +30,29 @@ public class VideoParser {
         }
     }
 
-    /**
-     * Valida se a categoria fornecida é válida.
-     *
-     * @param category A categoria a ser validada.
-     * @return A categoria validada em maiúsculas.
-     * @throws IllegalArgumentException Se a categoria for nula, vazia ou inválida.
-     */
-    public static String validateCategory(String category) {
-        if (category == null || category.isEmpty()) {
-            throw new IllegalArgumentException("A categoria não pode estar vazia.");
+    private static final Set<String> VALID_CATEGORIES = Set.of("FILME", "SERIE", "DOCUMENTARIO");
+    //public static String validateCategory(String category) {
+    public static VideoModel.VideoCategory validateAndParseCategory(String categoryInput) {
+        //if (category == null || category.isEmpty()) {
+        if (categoryInput == null || categoryInput.trim().isEmpty()) {
+            throw new IllegalArgumentException("Erro: A categoria não pode estar vazia.");
         }
-        String upperCategory = category.trim().toUpperCase();
-        if (!VALID_CATEGORIES.contains(upperCategory)) {
+        try {
+            return VideoModel.VideoCategory.valueOf(categoryInput.trim().toUpperCase());
+        } catch (IllegalArgumentException e) {
             throw new IllegalArgumentException("Categoria inválida. As categorias válidas são: " + VALID_CATEGORIES);
         }
-        return upperCategory;
+
+        //String upperCategory = category.trim().toUpperCase();
+        //if (!VALID_CATEGORIES.contains(upperCategory)) {
+            //throw new IllegalArgumentException("Categoria inválida. As categorias válidas são: " + VALID_CATEGORIES);
+        //}
+        //return upperCategory;
     }
 
-    public static VideoModel.VideoCategory validateAndParseCategory(String categoryInput) {
-        return null;
-    }
+//    public static VideoModel.VideoCategory validateAndParseCategory(String categoryInput) {
+//        return null;
+//    }
 }
 
 

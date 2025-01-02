@@ -161,7 +161,7 @@ public class VideoModel {
     }
 
     public enum VideoCategory {
-        VIDEO, SERIE, DOCUMENTARIO;
+            VIDEO, SERIE, DOCUMENTARIO;
 
         public static VideoCategory validateAndParseCategory(String category) {
             if (category == null || category.trim().isEmpty()){

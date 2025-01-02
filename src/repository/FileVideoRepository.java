@@ -15,67 +15,82 @@ public class FileVideoRepository implements VideoRepository {
         try{
             if (!file.exists()){
                 file.createNewFile();
+                addHeaderToFile(); //cabeçalho do txt
             }
         } catch (IOException e) {
             throw new RuntimeException("Falha ao incializar o  repositório: " + e.getMessage(), e);
         }
     }
 
-    @Override
-    public void deletedByTitle(String title) {
-        deletedByTitle(title);
+    private void addHeaderToFile(){
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(file, true))){
+            bw.write("Título; Descrição; Duração; Categoria; Data de Publicação; Status");
+            bw.newLine();
+        } catch (IOException e) {
+            throw new RuntimeException("Erro ao adicionar cabeçalho: " + e.getMessage(), e);
+        }
     }
 
     @Override
     public void save(VideoModel video) {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(file, true))) {
-            bw.write(video.toString());
+            bw.write(video.toString() +"; VALIDO");
             bw.newLine();
         } catch (IOException e) {
-            throw new RuntimeException("Erro ao salvar video: " + e.getMessage());
-            // Ignorar erros por enquanto
+            throw new RuntimeException("Erro ao salvar video: " + e.getMessage(), e);
         }
     }
+
+
+    public void saveInvalid(String error, VideoModel video) {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(file, true))){
+            bw.write(video.toString() + "; ERRO - " + error);
+            bw.newLine();
+        } catch (IOException e) {
+            throw new RuntimeException("Erro ao salvar video invalido: " + e.getMessage(), e);
+        }
+    }
+
 
     @Override
     public List<VideoModel> findAll() {
         List<VideoModel> videos = new ArrayList<>();
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
+            br.readLine();
             String line;
             while ((line = br.readLine()) != null) {
                 try{
-                    VideoModel video = VideoModel.fromString(line);
-                    if (video != null) {
-                        videos.add(video);
+                    if (line.endsWith("VALIDO")) {
+                        videos.add(VideoModel.fromString(line));
                     }
                 } catch (Exception e) {
-                    throw new RuntimeException("Erro ao processaro a linha de entrada: " + e.getMessage(), e);
+                    throw new RuntimeException("Erro ao processaro a linha: " + e.getMessage(), e);
                 }
             }
         } catch (IOException e) {
             throw new RuntimeException("Erro ao ler videos: " + e.getMessage(), e);
-            // Ignorar erros por enquanto
         }
         return videos;
     }
 
-    // Novo método saveAll para salvar uma lista de vídeos
     @Override
     public void saveAll(List<VideoModel> videos) {
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(file, true))) {
+        try (BufferedWriter bw = new BufferedWriter(new FileWriter(file, false))) {
+            addHeaderToFile();
             for (VideoModel video : videos) {
-                bw.write(video.toString());
+                bw.write(video.toString() + "; VALIDO");
                 bw.newLine();
             }
         } catch (IOException e) {
-            throw new RuntimeException("Erro ao salvar lista de videos: " + e.getMessage(), e);                  // Ignorar erros por enquanto
+            throw new RuntimeException("Erro ao salvar lista de videos: " + e.getMessage(), e);
         }
     }
-    //@Override
-    public void deleteByTitle(String title) {
+
+    @Override
+    public void deletedByTitle(String title) {
         List<VideoModel> videos = findAll(); // Load all videos
         List<VideoModel> updatedVideos = videos.stream()
-                .filter(video -> !video.getTitle().equalsIgnoreCase(title)) // Exclude the video with the given title
+                .filter(video -> !video.getTitle().equalsIgnoreCase(title))
                 .collect(Collectors.toList());
 
         saveAll(updatedVideos); // Save the updated list back to the file
