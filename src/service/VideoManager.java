@@ -5,8 +5,9 @@ import repository.VideoRepository;
 
 import java.text.SimpleDateFormat;
 import java.text.ParseException;
-//import java.util.List;
+import java.util.List;
 import java.util.*;
+import java.util.Map;
 //import java.util.ArrayList;
 import java.util.stream.Collectors;
 import java.util.Comparator;
@@ -15,8 +16,9 @@ public class VideoManager implements VideoService {
     private final VideoRepository repository;
     private static final String DATE_FORMAT = "dd/MM/yyyy";
 
-    public VideoManager(VideoRepository repository) {
-        this.repository = repository;
+
+    public VideoManager(VideoRepository videoRepository) {
+        this.repository = videoRepository;
     }
 
     @Override

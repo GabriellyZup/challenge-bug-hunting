@@ -17,19 +17,21 @@ import java.util.Map;
 
 public class Main {
     public static void main(String[] args) {
-        FileHandler fileHandler;
+        FileVideoRepository repository = new FileVideoRepository("video.txt");
+        VideoManager videoManager = new VideoManager(repository);
+        FileHandler fileHandler = new FileHandler(videoManager);
         VideoService videoService;
         SearchStrategy searchStrategy;
-        try {
-            fileHandler = new FileHandler();
-        } catch (Exception e) {
-            throw new RuntimeException("Erro ao inicializar o manipulador de arquivos: " + e.getMessage());
-        }
-        videoService = new VideoManager(new FileVideoRepository("videos.txt"));
-        searchStrategy = new TitleSearchStrategy();
+//        try {
+//            fileHandler = new FileHandler();
+//        } catch (Exception e) {
+//            throw new RuntimeException("Erro ao inicializar o manipulador de arquivos: " + e.getMessage());
+//        }
+           videoService = new VideoManager(new FileVideoRepository("videos.txt"));
+           searchStrategy = new TitleSearchStrategy();
 
         while (true) {
-         int option = fileHandler.displayMenu();
+            int option = fileHandler.displayMenu();
             switch (option){
                 case 1 -> handleAddVideo(fileHandler, videoService);
                 case 2 -> handleListVideos(videoService);
@@ -52,7 +54,7 @@ public class Main {
 
     }
 
-    private static void handleAddVideo(FileHandler fileHandler, VideoService videoService){
+    public static void handleAddVideo(FileHandler fileHandler, VideoService videoService){
         VideoModel video = fileHandler.captureVideo();
         if (video != null) {
             videoService.addVideo(video);
