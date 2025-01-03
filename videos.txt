@@ -1,4 +1,3 @@
-
 Título; Descrição; Duração; Categoria; Data de Publicação; Status
 VIDEO1;VIDEO1;3;FILME;10/10/2020
 

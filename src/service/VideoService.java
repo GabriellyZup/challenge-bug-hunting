@@ -11,8 +11,8 @@ public interface VideoService {
     List<VideoModel> searchByTitle(String title);
     boolean editVideo(String title, VideoModel updatedVideo);
     boolean deleteVideo(String title);
-    List<VideoModel> filterVideosByCategory(String category); // Adicionado
-    List<VideoModel> sortVideosByPublicationDate(boolean reverse); // Adicionado
+    List<VideoModel> filterVideosByCategory(String category);
+    List<VideoModel> sortVideosByPublicationDate(boolean reverse);
     Map<String, Object> generateStatistics();
 }
 

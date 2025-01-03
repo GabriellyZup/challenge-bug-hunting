@@ -1,6 +1,5 @@
 package main;
 
-
 import userInterface.FileHandler;
 import repository.FileVideoRepository;
 import service.VideoService;
@@ -8,12 +7,11 @@ import service.VideoManager;
 import strategy.SearchStrategy;
 import strategy.TitleSearchStrategy;
 import model.VideoModel;
+
 import java.util.Map.Entry;
 import java.text.ParseException;
 import java.util.List;
 import java.util.Map;
-
-
 
 public class Main {
     public static void main(String[] args) {
@@ -22,17 +20,13 @@ public class Main {
         FileHandler fileHandler = new FileHandler(videoManager);
         VideoService videoService;
         SearchStrategy searchStrategy;
-//        try {
-//            fileHandler = new FileHandler();
-//        } catch (Exception e) {
-//            throw new RuntimeException("Erro ao inicializar o manipulador de arquivos: " + e.getMessage());
-//        }
-           videoService = new VideoManager(new FileVideoRepository("videos.txt"));
-           searchStrategy = new TitleSearchStrategy();
+
+        videoService = new VideoManager(new FileVideoRepository("video.txt"));
+        searchStrategy = new TitleSearchStrategy();
 
         while (true) {
             int option = fileHandler.displayMenu();
-            switch (option){
+            switch (option) {
                 case 1 -> handleAddVideo(fileHandler, videoService);
                 case 2 -> handleListVideos(videoService);
                 case 3 -> handleSearchByTitle(fileHandler, videoService, searchStrategy);
@@ -46,15 +40,13 @@ public class Main {
                     System.out.println("Saindo do sistema...  Até logo!");
                     return;
                 }
-
                 default -> System.out.println("Opção inválida. Por favor, escolha uma opção valida. ");
-
             }
         }
 
     }
 
-    public static void handleAddVideo(FileHandler fileHandler, VideoService videoService){
+    public static void handleAddVideo(FileHandler fileHandler, VideoService videoService) {
         VideoModel video = fileHandler.captureVideo();
         if (video != null) {
             videoService.addVideo(video);
@@ -73,15 +65,15 @@ public class Main {
         }
     }
 
-    private static void handleSearchByTitle (FileHandler fileHandler, VideoService videoService, SearchStrategy searchStrategy){
-          String query = fileHandler.prompt("Digite o título para busca: ");
-          List<VideoModel> results = searchStrategy.search(videoService.listVideos(), query);
-          if (results.isEmpty()) {
-               System.out.println("Nenhum vídeo encontrado com o título: " + query);
-          } else {
-              System.out.println("\n===Resultados da Busca ===");
-              results.forEach(video -> System.out.println(video));
-          }
+    private static void handleSearchByTitle(FileHandler fileHandler, VideoService videoService, SearchStrategy searchStrategy) {
+        String query = fileHandler.prompt("Digite o título para busca: ");
+        List<VideoModel> results = searchStrategy.search(videoService.listVideos(), query);
+        if (results.isEmpty()) {
+            System.out.println("Nenhum vídeo encontrado com o título: " + query);
+        } else {
+            System.out.println("\n===Resultados da Busca ===");
+            results.forEach(video -> System.out.println(video));
+        }
     }
 
     private static void handleEditVideo(FileHandler fileHandler, VideoService videoService) {
@@ -99,7 +91,7 @@ public class Main {
         }
     }
 
-    private static void handleDeleteVideo (FileHandler fileHandler, VideoService videoService) {
+    private static void handleDeleteVideo(FileHandler fileHandler, VideoService videoService) {
         String title = fileHandler.prompt("Digite o título do vídeo a ser excluído: ");
         boolean success = videoService.deleteVideo(title);
         if (success) {
@@ -109,7 +101,7 @@ public class Main {
         }
     }
 
-    private static void handleFilterByCategory(FileHandler fileHandler, VideoService videoService){
+    private static void handleFilterByCategory(FileHandler fileHandler, VideoService videoService) {
         String category = fileHandler.prompt("Digite a categoria para filtrar: ");
         List<VideoModel> filteredVideos = videoService.filterVideosByCategory(category);
         if (filteredVideos.isEmpty()) {
@@ -120,7 +112,7 @@ public class Main {
         }
     }
 
-    private static void handleSortByPublicationDate(FileHandler fileHandler, VideoService videoService){
+    private static void handleSortByPublicationDate(FileHandler fileHandler, VideoService videoService) {
         System.out.println("=== Ordenar vídeos por data de publicação ===");
         boolean reverse = fileHandler.confirm("Deseja ordenar em ordem reversa? (sim/não): ");
         List<VideoModel> sortedVideos = videoService.sortVideosByPublicationDate(reverse);
@@ -132,7 +124,7 @@ public class Main {
         }
     }
 
-    private static void handleStatisticsReport(VideoService videoService){
+    private static void handleStatisticsReport(VideoService videoService) {
         Map<String, Object> stats = videoService.generateStatistics();
         System.out.println("=== Relatório de Estatísticas ===");
         System.out.println("Total de vídeos: " + stats.get("Total de videos"));

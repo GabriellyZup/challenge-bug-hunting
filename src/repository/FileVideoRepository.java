@@ -15,7 +15,7 @@ public class FileVideoRepository implements VideoRepository {
         try{
             if (!file.exists()){
                 file.createNewFile();
-                addHeaderToFile(); //cabeçalho do txt
+                addHeaderToFile();
             }
         } catch (IOException e) {
             throw new RuntimeException("Falha ao incializar o  repositório: " + e.getMessage(), e);
@@ -31,7 +31,6 @@ public class FileVideoRepository implements VideoRepository {
         }
     }
 
-    @Override
     public void save(VideoModel video) {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(file, true))) {
             bw.write(video.toString() +"; VALIDO");
@@ -51,8 +50,6 @@ public class FileVideoRepository implements VideoRepository {
         }
     }
 
-
-    @Override
     public List<VideoModel> findAll() {
         List<VideoModel> videos = new ArrayList<>();
         try (BufferedReader br = new BufferedReader(new FileReader(file))) {
@@ -64,7 +61,7 @@ public class FileVideoRepository implements VideoRepository {
                         videos.add(VideoModel.fromString(line));
                     }
                 } catch (Exception e) {
-                    throw new RuntimeException("Erro ao processaro a linha: " + e.getMessage(), e);
+                    throw new RuntimeException("Erro ao processar a linha: " + e.getMessage(), e);
                 }
             }
         } catch (IOException e) {
@@ -73,7 +70,6 @@ public class FileVideoRepository implements VideoRepository {
         return videos;
     }
 
-    @Override
     public void saveAll(List<VideoModel> videos) {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(file, false))) {
             addHeaderToFile();
@@ -86,13 +82,12 @@ public class FileVideoRepository implements VideoRepository {
         }
     }
 
-    @Override
     public void deletedByTitle(String title) {
-        List<VideoModel> videos = findAll(); // Load all videos
+        List<VideoModel> videos = findAll();
         List<VideoModel> updatedVideos = videos.stream()
                 .filter(video -> !video.getTitle().equalsIgnoreCase(title))
                 .collect(Collectors.toList());
 
-        saveAll(updatedVideos); // Save the updated list back to the file
+        saveAll(updatedVideos);
     }
 }

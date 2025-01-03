@@ -1,8 +1,5 @@
-//responsável apenas por representar os dados de um vídeo
-
 package model;
 
-//import javax.swing.text.DateFormatter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -17,14 +14,14 @@ public class VideoModel {
     private VideoCategory category;
     private Date publicationDate;
 
-    private static final String DATE_FORMAT = "dd/MM/yyyy"; // Formato de data padrão
+    private static final String DATE_FORMAT = "dd/MM/yyyy";
     private static final SimpleDateFormat DATE_FORMATTER = new SimpleDateFormat(DATE_FORMAT);
 
     static {
-        DATE_FORMATTER.setLenient(false); // Validação rigorosa de datas
+        DATE_FORMATTER.setLenient(false);
     }
 
-    public VideoModel(String title, String description, int duration, VideoCategory category, /*Date*/ String publicationDate) {
+    public VideoModel(String title, String description, int duration, VideoCategory category, String publicationDate) {
         validateTitle(title);
         validateDescription(description);
         validateDuration (duration);
@@ -33,10 +30,8 @@ public class VideoModel {
         this.description = description;
         this.duration = duration;
         this.category = category;
-        //this.publicationDate = publicationDate;
         this.publicationDate = validateAndParseDate(publicationDate);
     }
-
 
     public void setPublicationDate(Date publicationDate) {
         if (publicationDate == null) {
@@ -84,7 +79,6 @@ public class VideoModel {
         return publicationDate;
     }
 
-    // Validações
     private void validateTitle(String title) {
         if (title == null || title.trim().isEmpty()) {
             throw new IllegalArgumentException("O titulo não pode estar vazio");
@@ -113,21 +107,6 @@ public class VideoModel {
         }
     }
 
-    // toString para parse
-//    @Override
-//    public String toString() {
-//        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-//        return "VideoModel{" +
-//                "title='" + title + '\'' +
-//                ", description='" + description + '\'' +
-//                ", duration=" + duration +
-//                ", category=" + category +
-//                ", publicationDate=" + dateFormat.format(publicationDate) +
-//                '}';
-//    }
-//}
-
-    @Override
     public String toString() {
         SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
         return title + "; " + description + "; " + duration + "; " + category + "; " + DATE_FORMATTER.format(publicationDate);
@@ -167,35 +146,17 @@ public class VideoModel {
             if (category == null || category.trim().isEmpty()){
                 throw new IllegalArgumentException("Categoria inválida. Use FILME, SERIE ou DOCUMENTARIO.");
             }
-            //String upperCategory = category.trim().toUpperCase();
             try{
                 return VideoCategory.valueOf(category.trim().toUpperCase());
             } catch (IllegalArgumentException e) {
                 throw new IllegalArgumentException("Categoria inválida. Use FILME, SERIE ou DOCUMENTARIO.");
 
             }
-            //return false;
         }
 
         public static VideoCategory fromString(String categoryStr) {
             return null;
         }
 
-//        private static String upperCategory() {
-//            return null;
-//        }
-
-
     }
 }
-//
-//    public static VideoModel fromString(String linha) {
-//        try {
-//            String[] parts = linha.split(";");
-//            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-//            return new VideoModel(partes[0], partes[1], Integer.parseInt(partes[2]), partes[3], sdf.parse(partes[4]));
-//        } catch (Exception e) {
-//            return null; // Ignora erros de parsing
-//        }
-//    }
-
