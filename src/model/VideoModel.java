@@ -3,8 +3,6 @@ package model;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.time.LocalDate;
-import java.util.logging.FileHandler;
 
 public class VideoModel {
 
@@ -109,7 +107,7 @@ public class VideoModel {
 
     public String toString() {
         SimpleDateFormat sdf = new SimpleDateFormat(DATE_FORMAT);
-        return title + "; " + description + "; " + duration + "; " + category + "; " + DATE_FORMATTER.format(publicationDate);
+        return title + ";" + description + ";" + duration + ";" + category + ";" + DATE_FORMATTER.format(publicationDate);
     }
 
     public static VideoModel fromString(String line) {
@@ -140,7 +138,7 @@ public class VideoModel {
     }
 
     public enum VideoCategory {
-            VIDEO, SERIE, DOCUMENTARIO;
+        FILME, SERIE, DOCUMENTARIO;
 
         public static VideoCategory validateAndParseCategory(String category) {
             if (category == null || category.trim().isEmpty()){

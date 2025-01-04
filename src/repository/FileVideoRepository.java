@@ -15,31 +15,21 @@ public class FileVideoRepository implements VideoRepository {
         try{
             if (!file.exists()){
                 file.createNewFile();
-                addHeaderToFile();
+                //addHeaderToFile();
             }
         } catch (IOException e) {
             throw new RuntimeException("Falha ao incializar o  repositório: " + e.getMessage(), e);
         }
     }
 
-    private void addHeaderToFile(){
-        try (BufferedWriter bw = new BufferedWriter(new FileWriter(file, true))){
-            bw.write("Título; Descrição; Duração; Categoria; Data de Publicação; Status");
-            bw.newLine();
-        } catch (IOException e) {
-            throw new RuntimeException("Erro ao adicionar cabeçalho: " + e.getMessage(), e);
-        }
-    }
-
     public void save(VideoModel video) {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(file, true))) {
-            bw.write(video.toString() +"; VALIDO");
+            bw.write(video.toString() +";");
             bw.newLine();
         } catch (IOException e) {
             throw new RuntimeException("Erro ao salvar video: " + e.getMessage(), e);
         }
     }
-
 
     public void saveInvalid(String error, VideoModel video) {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(file, true))){
@@ -57,7 +47,7 @@ public class FileVideoRepository implements VideoRepository {
             String line;
             while ((line = br.readLine()) != null) {
                 try{
-                    if (line.endsWith("VALIDO")) {
+                    if (line.endsWith(";")) {
                         videos.add(VideoModel.fromString(line));
                     }
                 } catch (Exception e) {
@@ -72,9 +62,8 @@ public class FileVideoRepository implements VideoRepository {
 
     public void saveAll(List<VideoModel> videos) {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(file, false))) {
-            addHeaderToFile();
             for (VideoModel video : videos) {
-                bw.write(video.toString() + "; VALIDO");
+                bw.write(video.toString());
                 bw.newLine();
             }
         } catch (IOException e) {

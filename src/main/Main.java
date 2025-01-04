@@ -77,7 +77,7 @@ public class Main {
     }
 
     private static void handleEditVideo(FileHandler fileHandler, VideoService videoService) {
-        String title = fileHandler.prompt("Digite o título do video a ser editado");
+        String title = fileHandler.prompt("Digite o título do video a ser editado: ");
         VideoModel updatedVideo = fileHandler.captureVideo();
         if (updatedVideo != null) {
             boolean success = videoService.editVideo(title, updatedVideo);
